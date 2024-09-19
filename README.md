@@ -1,4 +1,4 @@
-# Prerequisties for build
+# Prerequisites for build
 
 - Meson
 - Ninja
