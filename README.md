@@ -3,6 +3,6 @@
 - Meson
 - Ninja
 - c++ compiler
-- OpenGL
+- OpenGL >= 3.2
 - GLFW
 - X11
