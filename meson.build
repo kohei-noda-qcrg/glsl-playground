@@ -4,6 +4,7 @@ add_project_arguments('-Wno-missing-field-initializers', language: 'cpp')
 
 deps = [
     dependency('gl', required: true),
+    dependency('glew', required: true),
     dependency('glfw3', required: true),
     dependency('x11', required: true),
     dependency('xrandr', required: true),
