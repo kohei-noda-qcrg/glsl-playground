@@ -1,4 +1,5 @@
 #include <cstdlib>
+#include <filesystem>
 #include <iostream>
 #include <vector>
 
@@ -7,6 +8,8 @@
 
 #include "macros/assert.hpp"
 #include "macros/unwrap.hpp"
+#include "util/file-io.hpp"
+#include "util/span.hpp"
 
 // print the result of a shader compilation
 auto printShaderInfoLog(GLuint shader, const char* str) -> GLboolean {
@@ -81,7 +84,16 @@ auto createProgram(const char* vsrc, const char* fsrc) -> GLuint {
     return 0;
 }
 
-auto main() -> int {
+auto loadProgram(const std::filesystem::path vert_path, const std::filesystem::path frag_path) -> GLuint {
+    constexpr auto error_value = GLuint{0};
+    unwrap_v(vert_file, read_file(vert_path.c_str()));
+    const auto vert_str = from_span(vert_file);
+    unwrap_v(frag_file, read_file(frag_path.c_str()));
+    const auto frag_str = from_span(frag_file);
+    return createProgram(vert_str.data(), frag_str.data());
+}
+
+auto main(int argc, const char* argv[]) -> int {
 
     ensure(glfwInit() == GLFW_TRUE, "Failed to initialize GLFW");
     // Register GLFW termination function
@@ -98,21 +110,14 @@ auto main() -> int {
     glfwSwapInterval(1);
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
-    static constexpr GLchar vsrc[] =
-        "#version 150\n"
-        "in vec4 position;"
-        "void main() {"
-        "    gl_Position = position;"
-        "}";
+    const auto cwd           = std::filesystem::current_path();
+    const auto command       = std::filesystem::path(std::string(argv[0]));
+    const auto cmd_full_path = command.is_absolute() ? command : cwd / command;
+    const auto this_file     = cmd_full_path.parent_path() / std::filesystem::path(__FILE__);
+    const auto point_vert    = this_file.parent_path() / "point.vert";
+    const auto point_frag    = this_file.parent_path() / "point.frag";
 
-    static constexpr GLchar fsrc[] =
-        "#version 150\n"
-        "out vec4 fragment;"
-        "void main() {"
-        "    fragment = vec4(1.0, 0.0, 0.0, 1.0);"
-        "}";
-
-    const auto program(createProgram(vsrc, fsrc));
+    const auto program(loadProgram(point_vert, point_frag));
 
     print("Successfully created window");
     while(glfwWindowShouldClose(window) == GL_FALSE) {
