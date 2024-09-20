@@ -20,6 +20,7 @@ auto main() -> int {
     const auto window = glfwCreateWindow(640, 480, "Hello, World!", NULL, NULL);
     // ensure(window == NULL, "Failed to create window");
     glfwMakeContextCurrent(window);
+    glfwSwapInterval(1);
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     print("Successfully created window");
     while(glfwWindowShouldClose(window) == GL_FALSE) {
