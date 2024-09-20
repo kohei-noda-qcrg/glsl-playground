@@ -93,7 +93,7 @@ auto loadProgram(const std::filesystem::path vert_path, const std::filesystem::p
     return createProgram(vert_str.data(), frag_str.data());
 }
 
-auto main(int argc, const char* argv[]) -> int {
+auto main(const int argc, const char* const argv[]) -> int {
 
     ensure(glfwInit() == GLFW_TRUE, "Failed to initialize GLFW");
     // Register GLFW termination function
