@@ -102,7 +102,7 @@ constexpr Object::Vertex rectangleVertex[] = {
     {-0.5f, 0.5f},
 };
 
-auto main(const int argc, const char* const argv[]) -> int {
+auto main(const int /*argc*/, const char* const argv[]) -> int {
 
     ensure(glfwInit() != GLFW_FALSE, "Failed to initialize GLFW");
     // Register GLFW termination function
