@@ -8,6 +8,7 @@
 #include <GLFW/glfw3.h>
 
 #include "Shape.hpp"
+#include "Window.hpp"
 #include "macros/assert.hpp"
 #include "macros/unwrap.hpp"
 #include "util/file-io.hpp"
@@ -113,14 +114,8 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     print("Successfully initialized GLFW");
 
-    const auto window = glfwCreateWindow(640, 480, "Hello, World!", NULL, NULL);
-    ensure(window != NULL, "Failed to create window");
-    glfwMakeContextCurrent(window);
-
-    glewExperimental = GL_TRUE;
-    ensure(glewInit() == GLEW_OK, "Can't initalize GLEW");
-
     glfwSwapInterval(1);
+    auto window = Window();
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
     const auto cwd           = std::filesystem::current_path();
@@ -134,12 +129,11 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
 
     const auto shape = std::unique_ptr<const Shape>(new Shape(2, 4, rectangleVertex));
     print("Successfully created window");
-    while(glfwWindowShouldClose(window) == GL_FALSE) {
+    while(window) {
         glClear(GL_COLOR_BUFFER_BIT);
         glUseProgram(program);
         shape->draw();
-        glfwSwapBuffers(window);
-        glfwPollEvents();
+        window.swapBuffers();
     }
     return 0;
 }
