@@ -1,11 +1,13 @@
 #include <cstdlib>
 #include <filesystem>
 #include <iostream>
+#include <memory>
 #include <vector>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "Shape.hpp"
 #include "macros/assert.hpp"
 #include "macros/unwrap.hpp"
 #include "util/file-io.hpp"
@@ -93,6 +95,13 @@ auto loadProgram(const std::filesystem::path vert_path, const std::filesystem::p
     return createProgram(vert_str.data(), frag_str.data());
 }
 
+constexpr Object::Vertex rectangleVertex[] = {
+	{ -0.5f, -0.5f },
+	{  0.5f, -0.5f },
+	{  0.5f,  0.5f },
+	{ -0.5f,  0.5f },
+};
+
 auto main(const int argc, const char* const argv[]) -> int {
 
     ensure(glfwInit() != GLFW_FALSE, "Failed to initialize GLFW");
@@ -123,10 +132,12 @@ auto main(const int argc, const char* const argv[]) -> int {
 
     const auto program = loadProgram(point_vert, point_frag);
 
+    const auto shape = std::unique_ptr<const Shape>(new Shape(2, 4, rectangleVertex));
     print("Successfully created window");
     while(glfwWindowShouldClose(window) == GL_FALSE) {
         glClear(GL_COLOR_BUFFER_BIT);
         glUseProgram(program);
+		shape->draw();
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
