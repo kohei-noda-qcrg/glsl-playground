@@ -19,6 +19,8 @@ Window::Window(int width, int height, const char* title)
 
     glfwSwapInterval(1);
 
+    glfwSetWindowUserPointer(window, this);
+
     glfwSetWindowSizeCallback(window, resize);
     resize(window, width, height);
 }
@@ -30,5 +32,14 @@ auto Window::swapBuffers() const -> void {
 auto Window::resize(GLFWwindow* window, int width, int height) -> void {
     int fbwidth, fbheight;
     glfwGetFramebufferSize(window, &fbwidth, &fbheight);
-    glViewport(0, 0, fbwidth, fbwidth);
+    glViewport(0, 0, fbwidth, fbheight);
+
+    auto* instance = static_cast<Window*>(glfwGetWindowUserPointer(window));
+    if(instance != NULL) {
+        instance->aspect = static_cast<GLfloat>(width) / static_cast<GLfloat>(height);
+    }
+}
+
+auto Window::getAspect() const -> GLfloat {
+    return aspect;
 }

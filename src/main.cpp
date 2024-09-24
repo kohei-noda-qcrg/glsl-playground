@@ -127,11 +127,13 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
 
     const auto program = loadProgram(point_vert, point_frag);
 
+    const auto apect_loc = glGetUniformLocation(program, "aspect");
     const auto shape = std::unique_ptr<const Shape>(new Shape(2, 4, rectangleVertex));
     print("Successfully created window");
     while(window) {
         glClear(GL_COLOR_BUFFER_BIT);
         glUseProgram(program);
+        glUniform1f(apect_loc, window.getAspect());
         shape->draw();
         window.swapBuffers();
     }
