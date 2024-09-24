@@ -4,7 +4,7 @@
 #include "macros/assert.hpp"
 
 Window::Window(int width, int height, const char* title)
-    : window(glfwCreateWindow(width, height, title, NULL, NULL)) {
+    : window(glfwCreateWindow(width, height, title, NULL, NULL)), scale(100.0f) {
     if(window == NULL) {
         warn("failed to create GLFW window");
         exit(1);
@@ -36,10 +36,11 @@ auto Window::resize(GLFWwindow* window, int width, int height) -> void {
 
     auto* instance = static_cast<Window*>(glfwGetWindowUserPointer(window));
     if(instance != NULL) {
-        instance->aspect = static_cast<GLfloat>(width) / static_cast<GLfloat>(height);
+        instance->size[0] = static_cast<GLfloat>(width);
+        instance->size[1] = static_cast<GLfloat>(height);
     }
 }
 
-auto Window::getAspect() const -> GLfloat {
-    return aspect;
+auto Window::getScale() const -> GLfloat {
+    return scale;
 }

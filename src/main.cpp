@@ -127,13 +127,15 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
 
     const auto program = loadProgram(point_vert, point_frag);
 
-    const auto apect_loc = glGetUniformLocation(program, "aspect");
+    const auto size_loc = glGetUniformLocation(program, "size");
+    const auto scale_loc = glGetUniformLocation(program, "scale");
     const auto shape = std::unique_ptr<const Shape>(new Shape(2, 4, rectangleVertex));
     print("Successfully created window");
     while(window) {
         glClear(GL_COLOR_BUFFER_BIT);
         glUseProgram(program);
-        glUniform1f(apect_loc, window.getAspect());
+        glUniform2fv(size_loc, 1, window.getSize().data());
+        glUniform1f(scale_loc, window.getScale());
         shape->draw();
         window.swapBuffers();
     }
