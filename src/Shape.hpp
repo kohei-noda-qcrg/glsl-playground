@@ -22,7 +22,7 @@ class Shape {
         execute<GL_LINE_LOOP>();
     };
 
-    template<GLenum mode>
+    template <GLenum mode>
     void execute() const {
         glDrawArrays(mode, 0, vertexcount);
     }

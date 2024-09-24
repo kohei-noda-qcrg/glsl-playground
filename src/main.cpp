@@ -96,10 +96,10 @@ auto loadProgram(const std::filesystem::path vert_path, const std::filesystem::p
 }
 
 constexpr Object::Vertex rectangleVertex[] = {
-	{ -0.5f, -0.5f },
-	{  0.5f, -0.5f },
-	{  0.5f,  0.5f },
-	{ -0.5f,  0.5f },
+    {-0.5f, -0.5f},
+    {0.5f, -0.5f},
+    {0.5f, 0.5f},
+    {-0.5f, 0.5f},
 };
 
 auto main(const int argc, const char* const argv[]) -> int {
@@ -117,8 +117,8 @@ auto main(const int argc, const char* const argv[]) -> int {
     ensure(window != NULL, "Failed to create window");
     glfwMakeContextCurrent(window);
 
-	glewExperimental = GL_TRUE;
-	ensure(glewInit() == GLEW_OK, "Can't initalize GLEW");
+    glewExperimental = GL_TRUE;
+    ensure(glewInit() == GLEW_OK, "Can't initalize GLEW");
 
     glfwSwapInterval(1);
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -137,7 +137,7 @@ auto main(const int argc, const char* const argv[]) -> int {
     while(glfwWindowShouldClose(window) == GL_FALSE) {
         glClear(GL_COLOR_BUFFER_BIT);
         glUseProgram(program);
-		shape->draw();
+        shape->draw();
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
