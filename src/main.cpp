@@ -107,6 +107,10 @@ auto main(const int argc, const char* const argv[]) -> int {
     const auto window = glfwCreateWindow(640, 480, "Hello, World!", NULL, NULL);
     ensure(window != NULL, "Failed to create window");
     glfwMakeContextCurrent(window);
+
+	glewExperimental = GL_TRUE;
+	ensure(glewInit() == GLEW_OK, "Can't initalize GLEW");
+
     glfwSwapInterval(1);
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
