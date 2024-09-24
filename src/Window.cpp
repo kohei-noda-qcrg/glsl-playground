@@ -4,7 +4,7 @@
 #include "macros/assert.hpp"
 
 Window::Window(int width, int height, const char* title)
-    : window(glfwCreateWindow(width, height, title, NULL, NULL)), scale(100.0f) {
+    : window(glfwCreateWindow(width, height, title, NULL, NULL)), cursor_pos({0.0f, 0.0f}), scale(100.0f) {
     if(window == NULL) {
         warn("failed to create GLFW window");
         exit(1);
