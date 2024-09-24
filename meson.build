@@ -10,6 +10,6 @@ deps = [
 ]
 
 
-src = files('src/main.cpp', 'src/Object.cpp')
+src = files('src/main.cpp', 'src/Object.cpp', 'src/Window.cpp')
 
 executable('glsl', src, dependencies: deps)
