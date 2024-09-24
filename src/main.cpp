@@ -50,7 +50,7 @@ auto printProgramInfoLog(GLuint program) -> GLboolean {
 }
 
 auto createProgram(const char* vsrc, const char* fsrc) -> GLuint {
-    const auto program(glCreateProgram());
+    const auto program = glCreateProgram();
 
     if(vsrc != NULL) {
         const auto vobj(glCreateShader(GL_VERTEX_SHADER));
@@ -95,7 +95,7 @@ auto loadProgram(const std::filesystem::path vert_path, const std::filesystem::p
 
 auto main(const int argc, const char* const argv[]) -> int {
 
-    ensure(glfwInit() == GLFW_TRUE, "Failed to initialize GLFW");
+    ensure(glfwInit() != GLFW_FALSE, "Failed to initialize GLFW");
     // Register GLFW termination function
     ensure(std::atexit(glfwTerminate) == 0, "Failed to register GLFW termination function");
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -105,7 +105,7 @@ auto main(const int argc, const char* const argv[]) -> int {
     print("Successfully initialized GLFW");
 
     const auto window = glfwCreateWindow(640, 480, "Hello, World!", NULL, NULL);
-    // ensure(window == NULL, "Failed to create window");
+    ensure(window != NULL, "Failed to create window");
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -117,7 +117,7 @@ auto main(const int argc, const char* const argv[]) -> int {
     const auto point_vert    = this_file.parent_path() / "point.vert";
     const auto point_frag    = this_file.parent_path() / "point.frag";
 
-    const auto program(loadProgram(point_vert, point_frag));
+    const auto program = loadProgram(point_vert, point_frag);
 
     print("Successfully created window");
     while(glfwWindowShouldClose(window) == GL_FALSE) {
