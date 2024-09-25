@@ -4,7 +4,7 @@
 #include "macros/assert.hpp"
 
 Window::Window(int width, int height, const char* title)
-    : window(glfwCreateWindow(width, height, title, NULL, NULL)), cursor_pos({0.0f, 0.0f}), scale(100.0f) {
+    : window(glfwCreateWindow(width, height, title, NULL, NULL)), cursor_pos({0.0f, 0.0f}), key_status(GLFW_RELEASE), scale(100.0f) {
     if(window == NULL) {
         warn("failed to create GLFW window");
         exit(1);
@@ -23,11 +23,16 @@ Window::Window(int width, int height, const char* title)
 
     glfwSetWindowSizeCallback(window, resize);
     glfwSetScrollCallback(window, wheel);
+    glfwSetKeyCallback(window, keyboard);
     resize(window, width, height);
 }
 
 Window::operator bool() const {
-    glfwPollEvents();
+    if(key_status == GLFW_RELEASE) {
+        glfwWaitEvents();
+    } else {
+        glfwPollEvents();
+    }
 
     auto* instance = static_cast<Window*>(glfwGetWindowUserPointer(window));
     if(glfwGetKey(window, GLFW_KEY_LEFT) != GLFW_RELEASE) {
@@ -70,6 +75,13 @@ auto Window::wheel(GLFWwindow* window, double /*x*/, double y) -> void {
     auto* instance = static_cast<Window*>(glfwGetWindowUserPointer(window));
     if(instance != NULL) {
         instance->scale += static_cast<GLfloat>(y * 5.0f);
+    }
+}
+
+auto Window::keyboard(GLFWwindow* window, int key, int /*scancode*/, int action, int /*mods*/) -> void {
+    auto* instance = static_cast<Window*>(glfwGetWindowUserPointer(window));
+    if(instance != NULL) {
+        instance->key_status = action;
     }
 }
 
