@@ -27,12 +27,22 @@ Window::Window(int width, int height, const char* title)
 }
 
 Window::operator bool() const {
-    glfwWaitEvents();
+    glfwPollEvents();
+
+    auto* instance = static_cast<Window*>(glfwGetWindowUserPointer(window));
+    if(glfwGetKey(window, GLFW_KEY_LEFT) != GLFW_RELEASE) {
+        instance->cursor_pos[0] += -2.0f / instance->size[0];
+    } else if(glfwGetKey(window, GLFW_KEY_RIGHT) != GLFW_RELEASE) {
+        instance->cursor_pos[0] += 2.0f / instance->size[0];
+    } else if(glfwGetKey(window, GLFW_KEY_UP) != GLFW_RELEASE) {
+        instance->cursor_pos[1] += 2.0f / instance->size[1];
+    } else if(glfwGetKey(window, GLFW_KEY_DOWN) != GLFW_RELEASE) {
+        instance->cursor_pos[1] += -2.0f / instance->size[1];
+    }
 
     if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) != GLFW_RELEASE) {
         double x, y;
         glfwGetCursorPos(window, &x, &y);
-        auto* instance = static_cast<Window*>(glfwGetWindowUserPointer(window));
         instance->cursor_pos[0] = static_cast<GLfloat>(x) * 2.0f / size[0] - 1.0f;
         instance->cursor_pos[1] = 1.0f - static_cast<GLfloat>(y) * 2.0f / size[1];
     }
