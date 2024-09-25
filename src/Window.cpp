@@ -26,6 +26,20 @@ Window::Window(int width, int height, const char* title)
     resize(window, width, height);
 }
 
+Window::operator bool() const {
+    glfwWaitEvents();
+
+    if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) != GLFW_RELEASE) {
+        double x, y;
+        glfwGetCursorPos(window, &x, &y);
+        auto* instance = static_cast<Window*>(glfwGetWindowUserPointer(window));
+        instance->cursor_pos[0] = static_cast<GLfloat>(x) * 2.0f / size[0] - 1.0f;
+        instance->cursor_pos[1] = 1.0f - static_cast<GLfloat>(y) * 2.0f / size[1];
+    }
+
+    return !glfwWindowShouldClose(window);
+}
+
 auto Window::swapBuffers() const -> void {
     glfwSwapBuffers(window);
 }
@@ -48,7 +62,6 @@ auto Window::wheel(GLFWwindow* window, double /*x*/, double y) -> void {
         instance->scale += static_cast<GLfloat>(y * 5.0f);
     }
 }
-
 
 auto Window::getScale() const -> GLfloat {
     return scale;

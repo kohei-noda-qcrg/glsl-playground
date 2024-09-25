@@ -18,20 +18,7 @@ class Window {
         glfwDestroyWindow(window);
     }
 
-    explicit operator bool() const {
-        glfwWaitEvents();
-
-        if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) != GLFW_RELEASE) {
-            double x, y;
-            glfwGetCursorPos(window, &x, &y);
-            auto* instance = static_cast<Window*>(glfwGetWindowUserPointer(window));
-
-            instance->cursor_pos[0] = static_cast<GLfloat>(x) * 2.0f / size[0] - 1.0f;
-            instance->cursor_pos[1] = 1.0f - static_cast<GLfloat>(y) * 2.0f / size[1];
-        }
-
-        return !glfwWindowShouldClose(window);
-    }
+    explicit operator bool() const;
 
     auto swapBuffers() const -> void;
 
