@@ -6,7 +6,7 @@
 class Window {
     GLFWwindow* const window;
 
-    std::array<GLfloat, 2> size;       // size of window in pixels
+    std::array<GLfloat, 2>         size;       // size of window in pixels
     mutable std::array<GLfloat, 2> cursor_pos; // position of cursor in normalized device coordinates
 
     GLfloat scale; // scale factor of device coordinate system with respect to world coordinate system
@@ -21,10 +21,12 @@ class Window {
     explicit operator bool() const {
         glfwWaitEvents();
 
-        double x, y;
-        glfwGetCursorPos(window, &x, &y);
-        this->cursor_pos[0] = static_cast<GLfloat>(x) * 2.0f / size[0] - 1.0f;
-        this->cursor_pos[1] = 1.0f - static_cast<GLfloat>(y) * 2.0f / size[1];
+        if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) != GLFW_RELEASE) {
+            double x, y;
+            glfwGetCursorPos(window, &x, &y);
+            this->cursor_pos[0] = static_cast<GLfloat>(x) * 2.0f / size[0] - 1.0f;
+            this->cursor_pos[1] = 1.0f - static_cast<GLfloat>(y) * 2.0f / size[1];
+        }
 
         return !glfwWindowShouldClose(window);
     }
