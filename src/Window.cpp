@@ -37,7 +37,7 @@ Window::operator bool() const {
         instance->cursor_pos[1] = 1.0f - static_cast<GLfloat>(y) * 2.0f / size[1];
     }
 
-    return !glfwWindowShouldClose(window) && !glfwGetKey(window, GLFW_KEY_ESCAPE);
+    return !glfwWindowShouldClose(window) && glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_RELEASE;
 }
 
 auto Window::swapBuffers() const -> void {
