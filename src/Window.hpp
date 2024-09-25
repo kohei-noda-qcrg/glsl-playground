@@ -36,6 +36,7 @@ class Window {
     auto swapBuffers() const -> void;
 
     static auto resize(GLFWwindow* window, int width, int height) -> void;
+    static auto wheel(GLFWwindow* window, double x, double y) -> void;
 
     auto getScale() const -> GLfloat;
 
