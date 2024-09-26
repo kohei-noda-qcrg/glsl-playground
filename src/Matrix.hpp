@@ -43,6 +43,46 @@ class Matrix {
         return matrix.data();
     }
 
+    /// @brief create an view transform matrxi
+    /// @param pov point of view (camera position)
+    /// @param target target position
+    /// @param up up vector, (0, 1, 0) is common
+    /// @return view matrix
+    static auto lookAt(const std::array<GLfloat, 3>& pov, const std::array<GLfloat, 3>& target, const std::array<GLfloat, 3>& up) -> Matrix {
+        const auto povx = pov[0], povy = pov[1], povz = pov[2];
+        const auto trgx = target[0], trgy = target[1], trgz = target[2];
+        const auto upx = up[0], upy = up[1], upz = up[2];
+
+        // create a tranform matrix that moves the camera to the origin
+        const auto tv = translate(-povx, -povy, -povz);
+        // new z-axis (labelled t axis) is target - pov
+        const auto tx = trgx - povx, ty = trgy - povy, tz = trgz - povz;
+        // new y-axis (labelled r axis) is up*t (* means cross product)
+        const auto rx = upy * tz - upz * ty, ry = upz * tx - upx * tz, rz = upx * ty - upy * tx;
+        // new x-axis (labelled s axis) is t*r (* means cross product)
+        const auto sx = ty * rz - tz * ry, sy = tz * rx - tx * rz, sz = tx * ry - ty * rx;
+
+        if((pow(sx, 2) + pow(sy, 2) + pow(sz, 2)) == 0) return tv; // invalid axis length
+
+        // normalize s, r, t axis and create rotation matrix
+        auto rv = Matrix();
+        rv.loadIdentity();
+        const auto s = std::sqrt(pow(sx, 2) + pow(sy, 2) + pow(sz, 2)); // normalize s axis
+        rv[1]        = sx / s;
+        rv[5]        = sy / s;
+        rv[9]        = sz / s;
+        const auto r = std::sqrt(pow(rx, 2) + pow(ry, 2) + pow(rz, 2)); // normalize r axis
+        rv[0]        = rx / r;
+        rv[4]        = ry / r;
+        rv[8]        = rz / r;
+        const auto t = std::sqrt(pow(tx, 2) + pow(ty, 2) + pow(tz, 2)); // normalize t axis
+        rv[2]        = tx / t;
+        rv[6]        = ty / t;
+        rv[10]       = tz / t;
+
+        return rv * tv;
+    }
+
     /*
      * create an identity matrix
      * 1 0 0 0
