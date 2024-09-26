@@ -23,6 +23,22 @@ class Matrix {
         return matrix[i];
     }
 
+    // Matrix multiplication
+    Matrix operator*(const Matrix& other) const {
+        Matrix res;
+        for(int i = 0; i < 16; i += 1) {
+            const int j = i & 3;
+            const int k = i & ~3;
+            res[i] =
+                matrix[j] * other[k] +
+                matrix[j + 4] * other[k + 1] +
+                matrix[j + 8] * other[k + 2] +
+                matrix[j + 12] * other[k + 3];
+        }
+
+        return res;
+    }
+
     const GLfloat* data() const {
         return matrix.data();
     }
@@ -147,14 +163,14 @@ class Matrix {
         if(d < 0.0f) return t; // invalid axis, return identity matrix because it's not going to change anything
         GLfloat l = x / d, m = y / d, n = z / d;
         GLfloat cosT = std::cos(angle), sinT = std::sin(angle);
-        t[0] = pow(l, 2) + (1 - pow(l, 2)) * cosT;
-        t[1] = l * m * (1 - cosT) - n * sinT;
-        t[2] = l * n * (1 - cosT) + m * sinT;
-        t[4] = l * m * (1 - cosT) + n * sinT;
-        t[5] = pow(m, 2) + (1 - pow(m, 2)) * cosT;
-        t[6] = m * n * (1 - cosT) - l * sinT;
-        t[8] = l * n * (1 - cosT) - m * sinT;
-        t[9] = m * n * (1 - cosT) + l * sinT;
+        t[0]  = pow(l, 2) + (1 - pow(l, 2)) * cosT;
+        t[1]  = l * m * (1 - cosT) - n * sinT;
+        t[2]  = l * n * (1 - cosT) + m * sinT;
+        t[4]  = l * m * (1 - cosT) + n * sinT;
+        t[5]  = pow(m, 2) + (1 - pow(m, 2)) * cosT;
+        t[6]  = m * n * (1 - cosT) - l * sinT;
+        t[8]  = l * n * (1 - cosT) - m * sinT;
+        t[9]  = m * n * (1 - cosT) + l * sinT;
         t[10] = pow(n, 2) + (1 - pow(n, 2)) * cosT;
         return t;
     }
