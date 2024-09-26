@@ -90,6 +90,7 @@ class Matrix {
         t[0]  = x;
         t[5]  = y;
         t[10] = z;
+        return t;
     }
 
     /*
