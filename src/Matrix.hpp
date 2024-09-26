@@ -215,4 +215,20 @@ class Matrix {
         t[10] = pow(n, 2) + (1 - pow(n, 2)) * cosT;
         return t;
     }
+
+    // orthogonal projection
+    static auto orthogonal(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat zNear, GLfloat zFar) -> Matrix {
+        Matrix t;
+        t.loadIdentity();
+        const auto dx = right - left, dy = top - bottom, dz = zFar - zNear;
+        if(dx == 0.0f || dy == 0.0f || dz == 0.0f) return t;
+        // normalize * move to origin
+        t[0]  = 2.0f / dx;
+        t[5]  = 2.0f / dy;
+        t[10] = -2.0f / dz;
+        t[12] = -(right + left) / dx;
+        t[13] = -(top + bottom) / dy;
+        t[14] = -(zFar - zNear) / dz;
+        return t;
+    }
 };

@@ -128,25 +128,26 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
 
     const auto program = loadProgram(point_vert, point_frag);
 
-    const auto modelviewLoc = glGetUniformLocation(program, "model");
-    const auto shape        = std::unique_ptr<const Shape>(new Shape(2, 4, rectangleVertex));
+    const auto modelviewLoc  = glGetUniformLocation(program, "model");
+    const auto projectionLoc = glGetUniformLocation(program, "projection");
+    const auto shape         = std::unique_ptr<const Shape>(new Shape(2, 4, rectangleVertex));
     print("Successfully created window");
     while(window) {
         glClear(GL_COLOR_BUFFER_BIT);
         glUseProgram(program);
         const auto* const size = window.getSize().data();
-        // scaling
-        const auto scale   = window.getScale() * 2.0f;
-        const auto scaling = Matrix::scale(scale / size[0], scale / size[1], 1.0f);
-        // translation
-        const auto* const pos         = window.getCursorPos().data();
-        const auto        translation = Matrix::translate(pos[0], pos[1], 0.0f);
-        // model transform matrix
-        const auto model = translation * scaling;
+        // projection
+        const auto scale = window.getScale() * 2.0f;
+        const auto w = size[0] / scale, h = size[1] / scale;
+        const auto projection = Matrix::orthogonal(-w, w, -h, h, 1.0f, 10.0f);
+        // model
+        const auto* const location = window.getCursorPos().data();
+        const auto        model    = Matrix::translate(location[0], location[1], 0.0f);
         // view transform matrix
-        const auto view = Matrix::lookAt({0.0f, 0.0f, 0.0f}, {-1.0f, -1.0f, -1.0f}, {0.0f, 1.0f, 0.0f});
+        const auto view = Matrix::lookAt({0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f});
         // modelview transform matrix
         const auto modelview = model * view;
+        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, projection.data());
         glUniformMatrix4fv(modelviewLoc, 1, GL_FALSE, modelview.data());
         shape->draw();
         window.swapBuffers();
