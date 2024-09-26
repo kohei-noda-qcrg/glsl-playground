@@ -128,22 +128,26 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
 
     const auto program = loadProgram(point_vert, point_frag);
 
-    const auto modelLoc = glGetUniformLocation(program, "model");
-    const auto shape    = std::unique_ptr<const Shape>(new Shape(2, 4, rectangleVertex));
+    const auto modelviewLoc = glGetUniformLocation(program, "model");
+    const auto shape        = std::unique_ptr<const Shape>(new Shape(2, 4, rectangleVertex));
     print("Successfully created window");
     while(window) {
         glClear(GL_COLOR_BUFFER_BIT);
         glUseProgram(program);
         const auto* const size = window.getSize().data();
         // scaling
-        const auto scale = window.getScale() * 2.0f;
+        const auto scale   = window.getScale() * 2.0f;
         const auto scaling = Matrix::scale(scale / size[0], scale / size[1], 1.0f);
         // translation
-        const auto* const pos = window.getCursorPos().data();
-        const auto translation = Matrix::translate(pos[0], pos[1], 0.0f);
+        const auto* const pos         = window.getCursorPos().data();
+        const auto        translation = Matrix::translate(pos[0], pos[1], 0.0f);
         // model transform matrix
         const auto model = translation * scaling;
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, model.data());
+        // view transform matrix
+        const auto view = Matrix::lookAt({0.0f, 0.0f, 0.0f}, {-1.0f, -1.0f, -1.0f}, {0.0f, 1.0f, 0.0f});
+        // modelview transform matrix
+        const auto modelview = model * view;
+        glUniformMatrix4fv(modelviewLoc, 1, GL_FALSE, modelview.data());
         shape->draw();
         window.swapBuffers();
     }
