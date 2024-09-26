@@ -7,6 +7,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "Matrix.hpp"
 #include "Shape.hpp"
 #include "Window.hpp"
 #include "macros/assert.hpp"
@@ -127,17 +128,22 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
 
     const auto program = loadProgram(point_vert, point_frag);
 
-    const auto size_loc  = glGetUniformLocation(program, "size");
-    const auto scale_loc = glGetUniformLocation(program, "scale");
-    const auto cursor_pos_loc = glGetUniformLocation(program, "cursor_pos");
-    const auto shape     = std::unique_ptr<const Shape>(new Shape(2, 4, rectangleVertex));
+    const auto modelLoc = glGetUniformLocation(program, "model");
+    const auto shape    = std::unique_ptr<const Shape>(new Shape(2, 4, rectangleVertex));
     print("Successfully created window");
     while(window) {
         glClear(GL_COLOR_BUFFER_BIT);
         glUseProgram(program);
-        glUniform2fv(size_loc, 1, window.getSize().data());
-        glUniform1f(scale_loc, window.getScale());
-        glUniform2fv(cursor_pos_loc, 1, window.getCursorPos().data());
+        const auto* const size = window.getSize().data();
+        // scaling
+        const auto scale = window.getScale() * 2.0f;
+        const auto scaling = Matrix::scale(scale / size[0], scale / size[1], 1.0f);
+        // translation
+        const auto* const pos = window.getCursorPos().data();
+        const auto translation = Matrix::translate(pos[0], pos[1], 0.0f);
+        // model transform matrix
+        const auto model = translation * scaling;
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, model.data());
         shape->draw();
         window.swapBuffers();
     }
