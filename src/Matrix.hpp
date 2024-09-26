@@ -96,7 +96,7 @@ class Matrix {
     }
 
     static auto identity() -> Matrix {
-        Matrix t;
+        auto t = Matrix();
         t.loadIdentity();
         return t;
     }
@@ -109,7 +109,7 @@ class Matrix {
      * 0 0 0 1
      */
     static auto translate(GLfloat x, GLfloat y, GLfloat z) -> Matrix {
-        Matrix t;
+        auto t = Matrix();
         t.loadIdentity();
         t[12] = x;
         t[13] = y;
@@ -125,7 +125,7 @@ class Matrix {
      * 0 0 0 1
      */
     static auto scale(GLfloat x, GLfloat y, GLfloat z) -> Matrix {
-        Matrix t;
+        auto t = Matrix();
         t.loadIdentity();
         t[0]  = x;
         t[5]  = y;
@@ -142,7 +142,7 @@ class Matrix {
      * 0 0           0          1
      */
     static auto rotateX(GLfloat angle) -> Matrix {
-        Matrix t;
+        auto t = Matrix();
         t.loadIdentity();
         t[5]  = std::cos(angle);
         t[6]  = -std::sin(angle);
@@ -160,7 +160,7 @@ class Matrix {
      * 0          0          0 1
      */
     static auto rotateY(GLfloat angle) -> Matrix {
-        Matrix t;
+        auto t = Matrix();
         t.loadIdentity();
         t[0]  = std::cos(angle);
         t[2]  = std::sin(angle);
@@ -178,7 +178,7 @@ class Matrix {
      * 0          0           0 1
      */
     static auto rotateZ(GLfloat angle) -> Matrix {
-        Matrix t;
+        auto t = Matrix();
         t.loadIdentity();
         t[0] = std::cos(angle);
         t[1] = -std::sin(angle);
@@ -198,7 +198,7 @@ class Matrix {
      * 0                      0                      0                      1
      */
     static auto rotate(GLfloat x, GLfloat y, GLfloat z, GLfloat angle) {
-        Matrix t;
+        auto t = Matrix();
         t.loadIdentity();
         GLfloat d = std::sqrt(x * x + y * y + z * z);
         if(d < 0.0f) return t; // invalid axis, return identity matrix because it's not going to change anything
@@ -218,7 +218,7 @@ class Matrix {
 
     // orthogonal projection
     static auto orthogonal(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat zNear, GLfloat zFar) -> Matrix {
-        Matrix t;
+        auto t = Matrix();
         t.loadIdentity();
         const auto dx = right - left, dy = top - bottom, dz = zFar - zNear;
         if(dx == 0.0f || dy == 0.0f || dz == 0.0f) return t;
