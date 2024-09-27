@@ -17,13 +17,12 @@ class Shape {
         : object(std::make_shared<Object>(size, vertexcount, vertex, index)),
           vertexcount(vertexcount) {}
 
-    void draw() const {
+    auto draw() const -> void {
         object->bind();
-        execute<GL_LINE_LOOP>();
+        execute();
     };
 
-    template <GLenum mode>
-    void execute() const {
-        glDrawArrays(mode, 0, vertexcount);
+    virtual auto execute() const -> void {
+        glDrawArrays(GL_LINE_LOOP, 0, vertexcount);
     }
 };
