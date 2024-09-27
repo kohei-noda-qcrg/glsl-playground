@@ -137,9 +137,9 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
         glUseProgram(program);
         const auto* const size = window.getSize().data();
         // projection
-        const auto scale = window.getScale() * 2.0f;
-        const auto w = size[0] / scale, h = size[1] / scale;
-        const auto projection = Matrix::frustum(-w, w, -h, h, 1.0f, 10.0f);
+        const auto fovy       = window.getScale() * 0.01f;
+        const auto aspect     = size[0] / size[1];
+        const auto projection = Matrix::perspective(fovy, aspect, 1.0f, 10.0f);
         // model
         const auto* const location = window.getCursorPos().data();
         const auto        model    = Matrix::translate(location[0], location[1], 0.0f);
