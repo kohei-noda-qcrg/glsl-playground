@@ -10,6 +10,7 @@
 #include "Matrix.hpp"
 #include "Shape.hpp"
 #include "ShapeIndex.hpp"
+#include "SolidShapeIndex.hpp"
 #include "Window.hpp"
 #include "macros/assert.hpp"
 #include "macros/unwrap.hpp"
@@ -126,7 +127,7 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
 
     const auto modelviewLoc  = glGetUniformLocation(program, "model");
     const auto projectionLoc = glGetUniformLocation(program, "projection");
-    const auto shape         = std::unique_ptr<const Shape>(new ShapeIndex(shape_example::cubeVertex,shape_example::wireCubeIndex));
+    const auto shape         = std::unique_ptr<const Shape>(new SolidShapeIndex(shape_example::cubeVertex, shape_example::solidCubeIndex));
     const auto shape_oct     = std::unique_ptr<const Shape>(new Shape(shape_example::octahedronVertex));
     print("Successfully created window");
     while(window) {
