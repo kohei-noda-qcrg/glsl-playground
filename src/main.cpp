@@ -144,7 +144,10 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
         const auto* const location = window.getCursorPos().data();
         const auto        model    = Matrix::translate(location[0], location[1], 0.0f);
         // view transform matrix
-        const auto view = Matrix::lookAt({0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f});
+        const auto pov    = std::array<GLfloat, 3>{3.0f, 4.0f, 5.0f};
+        const auto target = std::array<GLfloat, 3>{0.0f, 0.0f, 0.0f};
+        const auto up     = std::array<GLfloat, 3>{0.0f, 1.0f, 0.0f};
+        const auto view   = Matrix::lookAt(pov, target, up);
         // modelview transform matrix
         const auto modelview = model * view;
         glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, projection.data());
