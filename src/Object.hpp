@@ -13,7 +13,8 @@ class Object {
 
   public:
     struct Vertex {
-        std::array<GLfloat, 3> position;
+        GLfloat position[3];
+        GLfloat color[3];
     };
 
     void bind() const {

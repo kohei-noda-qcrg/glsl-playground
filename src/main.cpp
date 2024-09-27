@@ -78,6 +78,7 @@ auto createProgram(const char* vsrc, const char* fsrc) -> GLuint {
     }
 
     glBindAttribLocation(program, 0, "position");
+    glBindAttribLocation(program, 1, "color");
     glBindFragDataLocation(program, 0, "fragment");
     glLinkProgram(program);
 
@@ -113,14 +114,14 @@ const auto octahedronVertex = std::vector<Object::Vertex>{
     {0.0f, 0.0f, -1.0f}};
 
 const auto cubeVertex = std::vector<Object::Vertex>{
-    {-1.0f, -1.0f, -1.0f},
-    {-1.0f, -1.0f, 1.0f},
-    {-1.0f, 1.0f, 1.0f},
-    {-1.0f, 1.0f, -1.0f},
-    {1.0f, 1.0f, -1.0f},
-    {1.0f, -1.0f, -1.0f},
-    {1.0f, -1.0f, 1.0f},
-    {1.0f, 1.0f, 1.0f}};
+    {-1.0f, -1.0f, -1.0f, 0.0f, 0.0f, 0.0f},
+    {-1.0f, -1.0f, 1.0f, 1.0f, 0.0f, 0.8f},
+    {-1.0f, 1.0f, 1.0f, 0.0f, 0.8f, 0.0f},
+    {-1.0f, 1.0f, -1.0f, 0.0f, 0.8f, 0.8f},
+    {1.0f, 1.0f, -1.0f, 0.8f, 0.0f, 0.0f},
+    {1.0f, -1.0f, -1.0f, 0.8f, 0.0f, 0.8f},
+    {1.0f, -1.0f, 1.0f, 0.8f, 0.8f, 0.0f},
+    {1.0f, 1.0f, 1.0f, 0.8f, 0.8f, 0.8f}};
 
 const auto wireCubeIndex = std::vector<GLuint>{
     1, 0,

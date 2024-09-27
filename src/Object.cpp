@@ -1,3 +1,5 @@
+#include "util/print.hpp"
+
 #include "Object.hpp"
 
 Object::Object(GLint size, const std::vector<Vertex>& vertex, const std::optional<std::vector<GLuint>>& index) {
@@ -10,8 +12,13 @@ Object::Object(GLint size, const std::vector<Vertex>& vertex, const std::optiona
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, vertex.size() * sizeof(Vertex), vertex.data(), GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, size, GL_FLOAT, GL_FALSE, 0, 0);
+    const auto gpu_pos = static_cast<Vertex *>(0)->position;
+    glVertexAttribPointer(0, size, GL_FLOAT, GL_FALSE, sizeof(Vertex), gpu_pos);
     glEnableVertexAttribArray(0);
+    const auto gpu_color = static_cast<Vertex *>(0)->color;
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), gpu_color);
+    glEnableVertexAttribArray(1);
+    print("gpu_pos: ", gpu_pos, " gpu_color: ", gpu_color);
 
     glGenBuffers(1, &ibo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
