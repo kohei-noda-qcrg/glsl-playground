@@ -1,12 +1,15 @@
 #pragma once
 #include <array>
+#include <optional>
+#include <vector>
 
 #include <GL/glew.h>
 
 class Object {
   protected:
-    GLuint vao;
-    GLuint vbo;
+    GLuint vao; // summit array object
+    GLuint vbo; // summit buffer object
+    GLuint ibo; // summit buffer object for index
 
   public:
     struct Vertex {
@@ -17,7 +20,7 @@ class Object {
         glBindVertexArray(vao);
     };
 
-    Object(GLint size, GLsizei vertexcount, const Vertex* vertex);
+    Object(GLint size, GLsizei vertexcount, const Vertex* vertex, const std::optional<std::vector<GLuint>>& index = std::nullopt);
     virtual ~Object();
 
   private:
