@@ -17,8 +17,8 @@
 #include "macros/unwrap.hpp"
 #include "shape-example.hpp"
 #include "util/file-io.hpp"
-#include "util/span.hpp"
 #include "util/print.hpp"
+#include "util/span.hpp"
 
 // print the result of a shader compilation
 auto printShaderInfoLog(GLuint shader, const char* str) -> GLboolean {
@@ -117,6 +117,10 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
     glfwSwapInterval(1);
     auto window = Window();
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+    glFrontFace(GL_CCW);
+    glCullFace(GL_BACK);
+    glEnable(GL_CULL_FACE);
 
     const auto cwd           = std::filesystem::current_path();
     const auto command       = std::filesystem::path(std::string(argv[0]));
