@@ -122,6 +122,10 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
     glCullFace(GL_BACK);
     glEnable(GL_CULL_FACE);
 
+    glClearDepth(1.0);
+    glDepthFunc(GL_LESS);
+    glEnable(GL_DEPTH_TEST);
+
     const auto cwd           = std::filesystem::current_path();
     const auto command       = std::filesystem::path(std::string(argv[0]));
     const auto cmd_full_path = command.is_absolute() ? command : cwd / command;
@@ -140,7 +144,7 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
 
     print("Successfully created window");
     while(window) {
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glUseProgram(program);
         const auto* const size = window.getSize().data();
         // projection
@@ -160,6 +164,9 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
         const auto modelview = model * view;
         glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, projection.data());
         glUniformMatrix4fv(modelviewLoc, 1, GL_FALSE, modelview.data());
+        shape->draw();
+        const auto modelview1 = modelview * Matrix::translate(0.0f, 0.0f, 3.0f);
+        glUniformMatrix4fv(modelviewLoc, 1, GL_FALSE, modelview1.data());
         shape->draw();
         shape_oct->draw();
         window.swapBuffers();
