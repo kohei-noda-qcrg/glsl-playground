@@ -98,7 +98,7 @@ auto loadProgram(const std::filesystem::path vert_path, const std::filesystem::p
     return createProgram(vert_str.data(), frag_str.data());
 }
 
-constexpr Object::Vertex octahedronVertex[] = {
+const auto octahedronVertex = std::vector<Object::Vertex>{
     {0.0f, 1.0f, 0.0f},
     {-1.0f, 0.0f, 0.0f},
     {0.0f, -1.0f, 0.0f},
@@ -112,7 +112,7 @@ constexpr Object::Vertex octahedronVertex[] = {
     {1.0f, 0.0f, 0.0f},
     {0.0f, 0.0f, -1.0f}};
 
-constexpr Object::Vertex cubeVertex[] = {
+const auto cubeVertex = std::vector<Object::Vertex>{
     {-1.0f, -1.0f, -1.0f},
     {-1.0f, -1.0f, 1.0f},
     {-1.0f, 1.0f, 1.0f},
@@ -162,7 +162,7 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
 
     const auto modelviewLoc  = glGetUniformLocation(program, "model");
     const auto projectionLoc = glGetUniformLocation(program, "projection");
-    const auto shape         = std::unique_ptr<const Shape>(new ShapeIndex(3, 9, cubeVertex, wireCubeIndex));
+    const auto shape         = std::unique_ptr<const Shape>(new ShapeIndex(3, cubeVertex.size(), cubeVertex.data(), wireCubeIndex));
     print("Successfully created window");
     while(window) {
         glClear(GL_COLOR_BUFFER_BIT);
