@@ -55,8 +55,8 @@ class Matrix {
 
         // create a tranform matrix that moves the camera to the origin
         const auto tv = translate(-povx, -povy, -povz);
-        // new z-axis (labelled t axis) is target - pov
-        const auto tx = trgx - povx, ty = trgy - povy, tz = trgz - povz;
+        // new z-axis (labelled t axis) is pov - target
+        const auto tx = povx - trgx, ty = povy - trgy, tz = povz - trgz;
         // new y-axis (labelled r axis) is up*t (* means cross product)
         const auto rx = upy * tz - upz * ty, ry = upz * tx - upx * tz, rz = upx * ty - upy * tx;
         // new x-axis (labelled s axis) is t*r (* means cross product)
