@@ -20,7 +20,7 @@ class Object {
         glBindVertexArray(vao);
     };
 
-    Object(GLint size, GLsizei vertexcount, const Vertex* vertex, const std::optional<std::vector<GLuint>>& index = std::nullopt);
+    Object(GLint size, const std::vector<Vertex>& vertex, const std::optional<std::vector<GLuint>>& index = std::nullopt);
     virtual ~Object();
 
   private:

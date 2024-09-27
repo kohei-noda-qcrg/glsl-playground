@@ -162,7 +162,7 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
 
     const auto modelviewLoc  = glGetUniformLocation(program, "model");
     const auto projectionLoc = glGetUniformLocation(program, "projection");
-    const auto shape         = std::unique_ptr<const Shape>(new ShapeIndex(3, cubeVertex.size(), cubeVertex.data(), wireCubeIndex));
+    const auto shape         = std::unique_ptr<const Shape>(new ShapeIndex(3, cubeVertex, wireCubeIndex));
     print("Successfully created window");
     while(window) {
         glClear(GL_COLOR_BUFFER_BIT);

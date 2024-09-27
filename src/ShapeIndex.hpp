@@ -10,10 +10,8 @@ class ShapeIndex : public Shape {
     const std::optional<std::vector<GLuint>> index;
 
   public:
-    ShapeIndex(GLint size, GLsizei vertexcount, const Object::Vertex* vertex, const std::optional<std::vector<GLuint>>& index = std::nullopt)
-        : Shape(size, vertexcount, vertex, index), index(index) {
-          print("index hasvalue: ", index.has_value(), ", index size: ", index->size());
-        }
+    ShapeIndex(GLint size, const std::vector<Object::Vertex>& vertex, const std::optional<std::vector<GLuint>>& index = std::nullopt)
+        : Shape(size, vertex, index), index(index) {}
 
     virtual auto execute() const -> void {
         if(!index.has_value()) {
