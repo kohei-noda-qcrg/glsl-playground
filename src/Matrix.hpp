@@ -199,9 +199,9 @@ class Matrix {
      */
     static auto rotate(GLfloat x, GLfloat y, GLfloat z, GLfloat angle) {
         auto t = Matrix();
-        t.loadIdentity();
         GLfloat d = std::sqrt(x * x + y * y + z * z);
         if(d < 0.0f) return t; // invalid axis, return identity matrix because it's not going to change anything
+        t.loadIdentity();
         GLfloat l = x / d, m = y / d, n = z / d;
         GLfloat cosT = std::cos(angle), sinT = std::sin(angle);
         t[0]  = pow(l, 2) + (1 - pow(l, 2)) * cosT;

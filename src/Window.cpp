@@ -28,11 +28,7 @@ Window::Window(int width, int height, const char* title)
 }
 
 Window::operator bool() const {
-    if(key_status == GLFW_RELEASE) {
-        glfwWaitEvents();
-    } else {
-        glfwPollEvents();
-    }
+    glfwPollEvents();
 
     auto* instance = static_cast<Window*>(glfwGetWindowUserPointer(window));
     if(glfwGetKey(window, GLFW_KEY_LEFT) != GLFW_RELEASE) {

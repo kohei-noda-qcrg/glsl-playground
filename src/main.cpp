@@ -18,6 +18,7 @@
 #include "shape-example.hpp"
 #include "util/file-io.hpp"
 #include "util/span.hpp"
+#include "util/print.hpp"
 
 // print the result of a shader compilation
 auto printShaderInfoLog(GLuint shader, const char* str) -> GLboolean {
@@ -130,6 +131,9 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
     const auto projectionLoc = glGetUniformLocation(program, "projection");
     const auto shape         = std::unique_ptr<const Shape>(new SolidShape(shape_example::solidCubeVertex));
     const auto shape_oct     = std::unique_ptr<const Shape>(new Shape(shape_example::octahedronVertex));
+
+    glfwSetTime(0.0);
+
     print("Successfully created window");
     while(window) {
         glClear(GL_COLOR_BUFFER_BIT);
@@ -141,7 +145,8 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
         const auto projection = Matrix::perspective(fovy, aspect, 1.0f, 10.0f);
         // model
         const auto* const location = window.getCursorPos().data();
-        const auto        model    = Matrix::translate(location[0], location[1], 0.0f);
+        const auto        rotate   = Matrix::rotate(0.0f, 0.0f, 1.0f, static_cast<GLfloat>(glfwGetTime()));
+        const auto        model    = Matrix::translate(location[0], location[1], 0.0f) * rotate;
         // view transform matrix
         const auto pov    = std::array<GLfloat, 3>{3.0f, 4.0f, 5.0f};
         const auto target = std::array<GLfloat, 3>{0.0f, 0.0f, 0.0f};
