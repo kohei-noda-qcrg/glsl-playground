@@ -2,7 +2,7 @@
 
 #include "Object.hpp"
 
-Object::Object(GLint size, const std::vector<Vertex>& vertex, const std::optional<std::vector<GLuint>>& index) {
+Object::Object(const std::vector<Vertex>& vertex, const std::optional<std::vector<GLuint>>& index) {
     // vertex array object
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
@@ -12,13 +12,17 @@ Object::Object(GLint size, const std::vector<Vertex>& vertex, const std::optiona
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, vertex.size() * sizeof(Vertex), vertex.data(), GL_STATIC_DRAW);
 
-    const auto gpu_pos = static_cast<Vertex *>(0)->position;
-    glVertexAttribPointer(0, size, GL_FLOAT, GL_FALSE, sizeof(Vertex), gpu_pos);
+    // vertex position
+    const auto gpu_pos  = reinterpret_cast<const void*>(offsetof(Vertex, position));
+    constexpr auto size_pos = sizeof(Vertex::position) / sizeof(Vertex::position[0]);
+    glVertexAttribPointer(0, size_pos, GL_FLOAT, GL_FALSE, sizeof(Vertex), gpu_pos);
     glEnableVertexAttribArray(0);
-    const auto gpu_color = static_cast<Vertex *>(0)->color;
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), gpu_color);
+
+    // vertex color
+    const auto gpu_color  = reinterpret_cast<const void*>(offsetof(Vertex, color));
+    constexpr auto size_color = sizeof(Vertex::color) / sizeof(Vertex::color[0]);
+    glVertexAttribPointer(1, size_color, GL_FLOAT, GL_FALSE, sizeof(Vertex), gpu_color);
     glEnableVertexAttribArray(1);
-    print("gpu_pos: ", gpu_pos, " gpu_color: ", gpu_color);
 
     glGenBuffers(1, &ibo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);

@@ -13,8 +13,8 @@ class Shape {
     const GLsizei vertexcount;
 
   public:
-    Shape(GLint size, const std::vector<Object::Vertex>& vertex, const std::optional<std::vector<GLuint>>& index = std::nullopt)
-        : object(std::make_shared<Object>(size, vertex, index)),
+    Shape(const std::vector<Object::Vertex>& vertex, const std::optional<std::vector<GLuint>>& index = std::nullopt)
+        : object(std::make_shared<Object>(vertex, index)),
           vertexcount(vertex.size()) {}
 
     auto draw() const -> void {

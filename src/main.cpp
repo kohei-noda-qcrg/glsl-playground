@@ -114,14 +114,14 @@ const auto octahedronVertex = std::vector<Object::Vertex>{
     {0.0f, 0.0f, -1.0f}};
 
 const auto cubeVertex = std::vector<Object::Vertex>{
-    {-1.0f, -1.0f, -1.0f, 0.0f, 0.0f, 0.0f},
-    {-1.0f, -1.0f, 1.0f, 1.0f, 0.0f, 0.8f},
-    {-1.0f, 1.0f, 1.0f, 0.0f, 0.8f, 0.0f},
-    {-1.0f, 1.0f, -1.0f, 0.0f, 0.8f, 0.8f},
-    {1.0f, 1.0f, -1.0f, 0.8f, 0.0f, 0.0f},
-    {1.0f, -1.0f, -1.0f, 0.8f, 0.0f, 0.8f},
-    {1.0f, -1.0f, 1.0f, 0.8f, 0.8f, 0.0f},
-    {1.0f, 1.0f, 1.0f, 0.8f, 0.8f, 0.8f}};
+    {{-1.0f, -1.0f, -1.0f}, {0.0f, 0.0f, 0.0f}},
+    {{-1.0f, -1.0f, 1.0f}, {0.0f, 0.0f, 0.8f}},
+    {{-1.0f, 1.0f, 1.0f}, {0.0f, 0.8f, 0.0f}},
+    {{-1.0f, 1.0f, -1.0f}, {0.0f, 0.8f, 0.8f}},
+    {{1.0f, 1.0f, -1.0f}, {0.8f, 0.0f, 0.0f}},
+    {{1.0f, -1.0f, -1.0f}, {0.8f, 0.0f, 0.8f}},
+    {{1.0f, -1.0f, 1.0f}, {0.8f, 0.8f, 0.0f}},
+    {{1.0f, 1.0f, 1.0f}, {0.8f, 0.8f, 0.8f}}};
 
 const auto wireCubeIndex = std::vector<GLuint>{
     1, 0,
@@ -163,7 +163,7 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
 
     const auto modelviewLoc  = glGetUniformLocation(program, "model");
     const auto projectionLoc = glGetUniformLocation(program, "projection");
-    const auto shape         = std::unique_ptr<const Shape>(new ShapeIndex(3, cubeVertex, wireCubeIndex));
+    const auto shape         = std::unique_ptr<const Shape>(new ShapeIndex(cubeVertex, wireCubeIndex));
     print("Successfully created window");
     while(window) {
         glClear(GL_COLOR_BUFFER_BIT);

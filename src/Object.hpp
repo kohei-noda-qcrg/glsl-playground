@@ -13,15 +13,15 @@ class Object {
 
   public:
     struct Vertex {
-        GLfloat position[3];
-        GLfloat color[3];
+        std::array<GLfloat, 3> position;
+        std::array<GLfloat, 3> color;
     };
 
     void bind() const {
         glBindVertexArray(vao);
     };
 
-    Object(GLint size, const std::vector<Vertex>& vertex, const std::optional<std::vector<GLuint>>& index = std::nullopt);
+    Object(const std::vector<Vertex>& vertex, const std::optional<std::vector<GLuint>>& index = std::nullopt);
     virtual ~Object();
 
   private:
