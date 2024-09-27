@@ -9,6 +9,7 @@
 
 #include "Matrix.hpp"
 #include "Shape.hpp"
+#include "ShapeIndex.hpp"
 #include "Window.hpp"
 #include "macros/assert.hpp"
 #include "macros/unwrap.hpp"
@@ -111,6 +112,30 @@ constexpr Object::Vertex octahedronVertex[] = {
     {1.0f, 0.0f, 0.0f},
     {0.0f, 0.0f, -1.0f}};
 
+constexpr Object::Vertex cubeVertex[] = {
+    {-1.0f, -1.0f, -1.0f},
+    {-1.0f, -1.0f, 1.0f},
+    {-1.0f, 1.0f, 1.0f},
+    {-1.0f, 1.0f, -1.0f},
+    {1.0f, 1.0f, -1.0f},
+    {1.0f, -1.0f, -1.0f},
+    {1.0f, -1.0f, 1.0f},
+    {1.0f, 1.0f, 1.0f}};
+
+const auto wireCubeIndex = std::vector<GLuint>{
+    1, 0,
+    2, 7,
+    3, 0,
+    4, 7,
+    5, 0,
+    6, 7,
+    1, 2,
+    2, 3,
+    3, 4,
+    4, 5,
+    5, 6,
+    6, 1};
+
 auto main(const int /*argc*/, const char* const argv[]) -> int {
 
     ensure(glfwInit() != GLFW_FALSE, "Failed to initialize GLFW");
@@ -137,7 +162,7 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
 
     const auto modelviewLoc  = glGetUniformLocation(program, "model");
     const auto projectionLoc = glGetUniformLocation(program, "projection");
-    const auto shape         = std::unique_ptr<const Shape>(new Shape(3, 12, octahedronVertex));
+    const auto shape         = std::unique_ptr<const Shape>(new ShapeIndex(3, 9, cubeVertex, wireCubeIndex));
     print("Successfully created window");
     while(window) {
         glClear(GL_COLOR_BUFFER_BIT);
