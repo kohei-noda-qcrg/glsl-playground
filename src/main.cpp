@@ -13,6 +13,7 @@
 #include "Window.hpp"
 #include "macros/assert.hpp"
 #include "macros/unwrap.hpp"
+#include "shape-example.hpp"
 #include "util/file-io.hpp"
 #include "util/span.hpp"
 
@@ -99,44 +100,6 @@ auto loadProgram(const std::filesystem::path vert_path, const std::filesystem::p
     return createProgram(vert_str.data(), frag_str.data());
 }
 
-const auto octahedronVertex = std::vector<Object::Vertex>{
-    {{0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, 0.0f}},
-    {{-1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.8f}},
-    {{0.0f, -1.0f, 0.0f}, {0.0f, 0.8f, 0.0f}},
-    {{1.0f, 0.0f, 0.0f}, {0.0f, 0.8f, 0.8f}},
-    {{0.0f, 1.0f, 0.0f}, {0.8f, 0.0f, 0.0f}},
-    {{0.0f, 0.0f, 1.0f}, {0.8f, 0.0f, 0.8f}},
-    {{0.0f, -1.0f, 0.0f}, {0.8f, 0.8f, 0.0f}},
-    {{0.0f, 0.0f, -1.0f}, {0.8f, 0.8f, 0.8f}},
-    {{-1.0f, 0.0f, 0.0f}, {0.8f, 0.0f, 0.0f}},
-    {{0.0f, 0.0f, 1.0f}, {0.0f, 0.8f, 0.0f}},
-    {{1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.8f}},
-    {{0.0f, 0.0f, -1.0f}, {0.8f, 0.0f, 0.8f}}};
-
-const auto cubeVertex = std::vector<Object::Vertex>{
-    {{-1.0f, -1.0f, -1.0f}, {0.0f, 0.0f, 0.0f}},
-    {{-1.0f, -1.0f, 1.0f}, {0.0f, 0.0f, 0.8f}},
-    {{-1.0f, 1.0f, 1.0f}, {0.0f, 0.8f, 0.0f}},
-    {{-1.0f, 1.0f, -1.0f}, {0.0f, 0.8f, 0.8f}},
-    {{1.0f, 1.0f, -1.0f}, {0.8f, 0.0f, 0.0f}},
-    {{1.0f, -1.0f, -1.0f}, {0.8f, 0.0f, 0.8f}},
-    {{1.0f, -1.0f, 1.0f}, {0.8f, 0.8f, 0.0f}},
-    {{1.0f, 1.0f, 1.0f}, {0.8f, 0.8f, 0.8f}}};
-
-const auto wireCubeIndex = std::vector<GLuint>{
-    1, 0,
-    2, 7,
-    3, 0,
-    4, 7,
-    5, 0,
-    6, 7,
-    1, 2,
-    2, 3,
-    3, 4,
-    4, 5,
-    5, 6,
-    6, 1};
-
 auto main(const int /*argc*/, const char* const argv[]) -> int {
 
     ensure(glfwInit() != GLFW_FALSE, "Failed to initialize GLFW");
@@ -163,8 +126,8 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
 
     const auto modelviewLoc  = glGetUniformLocation(program, "model");
     const auto projectionLoc = glGetUniformLocation(program, "projection");
-    const auto shape         = std::unique_ptr<const Shape>(new ShapeIndex(cubeVertex, wireCubeIndex));
-    const auto shape_oct     = std::unique_ptr<const Shape>(new Shape(octahedronVertex));
+    const auto shape         = std::unique_ptr<const Shape>(new ShapeIndex(shape_example::cubeVertex,shape_example::wireCubeIndex));
+    const auto shape_oct     = std::unique_ptr<const Shape>(new Shape(shape_example::octahedronVertex));
     print("Successfully created window");
     while(window) {
         glClear(GL_COLOR_BUFFER_BIT);
