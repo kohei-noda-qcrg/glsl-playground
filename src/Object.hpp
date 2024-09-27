@@ -10,7 +10,7 @@ class Object {
 
   public:
     struct Vertex {
-        std::array<GLfloat, 2> position;
+        std::array<GLfloat, 3> position;
     };
 
     void bind() const {
