@@ -100,18 +100,18 @@ auto loadProgram(const std::filesystem::path vert_path, const std::filesystem::p
 }
 
 const auto octahedronVertex = std::vector<Object::Vertex>{
-    {0.0f, 1.0f, 0.0f},
-    {-1.0f, 0.0f, 0.0f},
-    {0.0f, -1.0f, 0.0f},
-    {1.0f, 0.0f, 0.0f},
-    {0.0f, 1.0f, 0.0f},
-    {0.0f, 0.0f, 1.0f},
-    {0.0f, -1.0f, 0.0f},
-    {0.0f, 0.0f, -1.0f},
-    {-1.0f, 0.0f, 0.0f},
-    {0.0f, 0.0f, 1.0f},
-    {1.0f, 0.0f, 0.0f},
-    {0.0f, 0.0f, -1.0f}};
+    {{0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, 0.0f}},
+    {{-1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.8f}},
+    {{0.0f, -1.0f, 0.0f}, {0.0f, 0.8f, 0.0f}},
+    {{1.0f, 0.0f, 0.0f}, {0.0f, 0.8f, 0.8f}},
+    {{0.0f, 1.0f, 0.0f}, {0.8f, 0.0f, 0.0f}},
+    {{0.0f, 0.0f, 1.0f}, {0.8f, 0.0f, 0.8f}},
+    {{0.0f, -1.0f, 0.0f}, {0.8f, 0.8f, 0.0f}},
+    {{0.0f, 0.0f, -1.0f}, {0.8f, 0.8f, 0.8f}},
+    {{-1.0f, 0.0f, 0.0f}, {0.8f, 0.0f, 0.0f}},
+    {{0.0f, 0.0f, 1.0f}, {0.0f, 0.8f, 0.0f}},
+    {{1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.8f}},
+    {{0.0f, 0.0f, -1.0f}, {0.8f, 0.0f, 0.8f}}};
 
 const auto cubeVertex = std::vector<Object::Vertex>{
     {{-1.0f, -1.0f, -1.0f}, {0.0f, 0.0f, 0.0f}},
@@ -164,6 +164,7 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
     const auto modelviewLoc  = glGetUniformLocation(program, "model");
     const auto projectionLoc = glGetUniformLocation(program, "projection");
     const auto shape         = std::unique_ptr<const Shape>(new ShapeIndex(cubeVertex, wireCubeIndex));
+    const auto shape_oct     = std::unique_ptr<const Shape>(new Shape(octahedronVertex));
     print("Successfully created window");
     while(window) {
         glClear(GL_COLOR_BUFFER_BIT);
@@ -186,6 +187,7 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
         glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, projection.data());
         glUniformMatrix4fv(modelviewLoc, 1, GL_FALSE, modelview.data());
         shape->draw();
+        shape_oct->draw();
         window.swapBuffers();
     }
     return 0;
