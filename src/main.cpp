@@ -146,12 +146,11 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
     const auto shape           = std::unique_ptr<const Shape>(new SolidShapeIndex(shape_example::solidSphereVertex, shape_example::solidSphereIndex));
     const auto shape_oct       = std::unique_ptr<const Shape>(new Shape(shape_example::octahedronVertex));
 
-    using vec3                      = std::array<GLfloat, 3>;
     static constexpr auto Lcount    = 2;
-    constexpr auto        Lpos      = std::array{vector::Vector{0.0f, 0.0f, 5.0f, 1.0f}, vector::Vector{8.0f, 0.0f, 0.0f, 1.0f}};
-    constexpr auto        Lambient  = std::array{vec3{0.2f, 0.1f, 0.1f}, vec3{0.1f, 0.1f, 0.1f}};
-    constexpr auto        Ldiffuse  = std::array{vec3{1.0f, 0.5f, 0.5f}, vec3{0.9f, 0.9f, 0.9f}};
-    constexpr auto        Lspecular = std::array{vec3{1.0f, 0.5f, 0.5f}, vec3{0.9f, 0.9f, 0.9f}};
+    constexpr auto        Lpos      = std::array{vector::vec4{0.0f, 0.0f, 5.0f, 1.0f}, vector::vec4{8.0f, 0.0f, 0.0f, 1.0f}};
+    constexpr auto        Lambient  = std::array{vector::vec3{0.2f, 0.1f, 0.1f}, vector::vec3{0.1f, 0.1f, 0.1f}};
+    constexpr auto        Ldiffuse  = std::array{vector::vec3{1.0f, 0.5f, 0.5f}, vector::vec3{0.9f, 0.9f, 0.9f}};
+    constexpr auto        Lspecular = std::array{vector::vec3{1.0f, 0.5f, 0.5f}, vector::vec3{0.9f, 0.9f, 0.9f}};
 
     glfwSetTime(0.0);
 
@@ -169,9 +168,9 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
         const auto        rotate   = Matrix::rotate(0.0f, 0.0f, 1.0f, static_cast<GLfloat>(glfwGetTime()));
         const auto        model    = Matrix::translate(location[0], location[1], 0.0f) * rotate;
         // view transform matrix
-        const auto pov    = std::array<GLfloat, 3>{3.0f, 4.0f, 5.0f};
-        const auto target = std::array<GLfloat, 3>{0.0f, 0.0f, 0.0f};
-        const auto up     = std::array<GLfloat, 3>{0.0f, 1.0f, 0.0f};
+        const auto pov    = vector::vec3{3.0f, 4.0f, 5.0f};
+        const auto target = vector::vec3{0.0f, 0.0f, 0.0f};
+        const auto up     = vector::vec3{0.0f, 1.0f, 0.0f};
         const auto view   = Matrix::lookAt(pov, target, up);
 
         auto normalMatrix = std::array<GLfloat, 9>{};
