@@ -7,11 +7,13 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "Material.hpp"
 #include "Matrix.hpp"
 #include "Shape.hpp"
 #include "ShapeIndex.hpp"
 #include "SolidShape.hpp"
 #include "SolidShapeIndex.hpp"
+#include "Uniform.hpp"
 #include "Vector.hpp"
 #include "Window.hpp"
 #include "macros/assert.hpp"
@@ -143,14 +145,35 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
     const auto LambientLoc     = glGetUniformLocation(program, "Lambient");
     const auto LdiffuseLoc     = glGetUniformLocation(program, "Ldiffuse");
     const auto LspecularLoc    = glGetUniformLocation(program, "Lspecular");
-    const auto shape           = std::unique_ptr<const Shape>(new SolidShapeIndex(shape_example::solidSphereVertex, shape_example::solidSphereIndex));
-    const auto shape_oct       = std::unique_ptr<const Shape>(new Shape(shape_example::octahedronVertex));
+    const auto MaterialLoc     = glGetUniformBlockIndex(program, "Material");
+
+    glUniformBlockBinding(program, MaterialLoc, 0);
+
+    const auto shape     = std::unique_ptr<const Shape>(new SolidShapeIndex(shape_example::solidSphereVertex, shape_example::solidSphereIndex));
+    const auto shape_oct = std::unique_ptr<const Shape>(new Shape(shape_example::octahedronVertex));
 
     static constexpr auto Lcount    = 2;
     constexpr auto        Lpos      = std::array{vector::vec4{0.0f, 0.0f, 5.0f, 1.0f}, vector::vec4{8.0f, 0.0f, 0.0f, 1.0f}};
     constexpr auto        Lambient  = std::array{vector::vec3{0.2f, 0.1f, 0.1f}, vector::vec3{0.1f, 0.1f, 0.1f}};
     constexpr auto        Ldiffuse  = std::array{vector::vec3{1.0f, 0.5f, 0.5f}, vector::vec3{0.9f, 0.9f, 0.9f}};
     constexpr auto        Lspecular = std::array{vector::vec3{1.0f, 0.5f, 0.5f}, vector::vec3{0.9f, 0.9f, 0.9f}};
+
+    static constexpr Material color[] = {
+        Material{
+            .ambient   = vector::vec3{0.6f, 0.6f, 0.2f},
+            .diffuse   = vector::vec3{0.6f, 0.6f, 0.2f},
+            .specular  = vector::vec3{0.3f, 0.3f, 0.3f},
+            .shininess = GLfloat{30.0f},
+        },
+        Material{
+            .ambient   = vector::vec3{0.1f, 0.1f, 0.5f},
+            .diffuse   = vector::vec3{0.1f, 0.1f, 0.5f},
+            .specular  = vector::vec3{0.4f, 0.4f, 0.4f},
+            .shininess = GLfloat{30.0f},
+        },
+    };
+
+    const auto material = std::array<Uniform<Material>, 2>{&color[0], &color[1]};
 
     glfwSetTime(0.0);
 
@@ -186,11 +209,13 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
             glUniform3fv(LdiffuseLoc + i, 1, Ldiffuse[i].data());
             glUniform3fv(LspecularLoc + i, 1, Lspecular[i].data());
         }
+        material[0].select(0);
         shape->draw();
         const auto modelview1 = modelview * Matrix::translate(0.0f, 0.0f, 3.0f);
         modelview1.getNormalMatrix(normalMatrix);
         glUniformMatrix4fv(modelviewLoc, 1, GL_FALSE, modelview1.data());
         glUniformMatrix3fv(normalMatrixLoc, 1, GL_FALSE, normalMatrix.data());
+        material[1].select(0);
         shape->draw();
         shape_oct->draw();
         window.swapBuffers();

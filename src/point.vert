@@ -7,10 +7,13 @@ uniform vec4 Lpos[Lcount];
 uniform vec3 Lambient[Lcount];
 uniform vec3 Ldiffuse[Lcount];
 uniform vec3 Lspecular[Lcount];
-const vec3 Kambient=vec3(.6,.6,.2);
-const vec3 Kdiffuse=vec3(.6,.6,.2);
-const vec3 Kspecular=vec3(.3);
-const float KShininess=30.;
+layout (std140) uniform Material
+{
+    vec3 Kambient;
+    vec3 Kdiffuse;
+    vec3 Kspecular;
+    float KShininess;
+};
 in vec4 position;
 in vec3 normal;
 out vec3 Idiffuse;
