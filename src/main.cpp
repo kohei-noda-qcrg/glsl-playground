@@ -158,7 +158,7 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
     constexpr auto        Ldiffuse  = std::array{vector::vec3{1.0f, 0.5f, 0.5f}, vector::vec3{0.9f, 0.9f, 0.9f}};
     constexpr auto        Lspecular = std::array{vector::vec3{1.0f, 0.5f, 0.5f}, vector::vec3{0.9f, 0.9f, 0.9f}};
 
-    static constexpr Material color[] = {
+    static constexpr auto color = std::array{
         Material{
             .ambient   = vector::vec3{0.6f, 0.6f, 0.2f},
             .diffuse   = vector::vec3{0.6f, 0.6f, 0.2f},
