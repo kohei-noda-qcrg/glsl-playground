@@ -2,10 +2,10 @@
 uniform mat4 model;
 uniform mat4 projection;
 uniform mat3 normalMatrix;
-const vec4 Lpos=vec4(0.,0.,5.,1.);
-const vec3 Lambient=vec3(.2);
-const vec3 Ldiffuse=vec3(1.);
-const vec3 Lspecular=vec3(1.);
+uniform vec4 Lpos=vec4(0.,0.,5.,1.);
+uniform vec3 Lambient=vec3(.2);
+uniform vec3 Ldiffuse=vec3(1.);
+uniform vec3 Lspecular=vec3(1.);
 const vec3 Kambient=vec3(.6,.6,.2);
 const vec3 Kdiffuse=vec3(.6,.6,.2);
 const vec3 Kspecular=vec3(.3);

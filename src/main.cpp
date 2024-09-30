@@ -12,6 +12,7 @@
 #include "ShapeIndex.hpp"
 #include "SolidShape.hpp"
 #include "SolidShapeIndex.hpp"
+#include "Vector.hpp"
 #include "Window.hpp"
 #include "macros/assert.hpp"
 #include "macros/unwrap.hpp"
@@ -138,8 +139,17 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
     const auto modelviewLoc    = glGetUniformLocation(program, "model");
     const auto projectionLoc   = glGetUniformLocation(program, "projection");
     const auto normalMatrixLoc = glGetUniformLocation(program, "normalMatrix");
+    const auto LposLoc         = glGetUniformLocation(program, "Lpos");
+    const auto LambientLoc     = glGetUniformLocation(program, "Lambient");
+    const auto LdiffuseLoc     = glGetUniformLocation(program, "Ldiffuse");
+    const auto LspecularLoc    = glGetUniformLocation(program, "Lspecular");
     const auto shape           = std::unique_ptr<const Shape>(new SolidShapeIndex(shape_example::solidSphereVertex, shape_example::solidSphereIndex));
     const auto shape_oct       = std::unique_ptr<const Shape>(new Shape(shape_example::octahedronVertex));
+
+    constexpr auto Lpos      = vector::Vector{0.0f, 0.0f, 5.0f, 1.0f};
+    constexpr auto Lambient  = std::array<GLfloat, 3>{0.2f, 0.1f, 0.1f};
+    constexpr auto Ldiffuse  = std::array<GLfloat, 3>{1.0f, 0.5f, 0.5f};
+    constexpr auto Lspecular = std::array<GLfloat, 3>{1.0f, 0.5f, 0.5f};
 
     glfwSetTime(0.0);
 
@@ -169,6 +179,10 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
         glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, projection.data());
         glUniformMatrix4fv(modelviewLoc, 1, GL_FALSE, modelview.data());
         glUniformMatrix3fv(normalMatrixLoc, 1, GL_FALSE, normalMatrix.data());
+        glUniform4fv(LposLoc, 1, (view * Lpos).data());
+        glUniform3fv(LambientLoc, 1, Lambient.data());
+        glUniform3fv(LdiffuseLoc, 1, Ldiffuse.data());
+        glUniform3fv(LspecularLoc, 1, Lspecular.data());
         shape->draw();
         const auto modelview1 = modelview * Matrix::translate(0.0f, 0.0f, 3.0f);
         modelview1.getNormalMatrix(normalMatrix);
