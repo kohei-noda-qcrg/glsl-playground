@@ -173,7 +173,7 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
         },
     };
 
-    const auto material = std::array<Uniform<Material>, 2>{&color[0], &color[1]};
+    const auto material = Uniform<Material>(color.data(), 2);
 
     glfwSetTime(0.0);
 
@@ -209,13 +209,13 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
             glUniform3fv(LdiffuseLoc + i, 1, Ldiffuse[i].data());
             glUniform3fv(LspecularLoc + i, 1, Lspecular[i].data());
         }
-        material[0].select(0);
+        material.select(0, 0);
         shape->draw();
         const auto modelview1 = modelview * Matrix::translate(0.0f, 0.0f, 3.0f);
         modelview1.getNormalMatrix(normalMatrix);
         glUniformMatrix4fv(modelviewLoc, 1, GL_FALSE, modelview1.data());
         glUniformMatrix3fv(normalMatrixLoc, 1, GL_FALSE, normalMatrix.data());
-        material[1].select(0);
+        material.select(0, 1);
         shape->draw();
         shape_oct->draw();
         window.swapBuffers();
