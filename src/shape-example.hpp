@@ -94,4 +94,41 @@ const auto solidCubeIndex = std::vector<GLuint>{
     30, 31, 32, 33, 34, 35  // front
 };
 
+constexpr auto slices = 16, stacks = 8;
+const auto     solidSphereVertex = std::vector<Object::Vertex>([]() {
+    auto vertices = std::vector<Object::Vertex>();
+    for(auto j = 0; j <= stacks; ++j) {
+        const auto theta = j * M_PI / stacks;
+        const auto y = float(std::cos(theta)), r = float(std::sin(theta));
+        for(auto i = 0; i <= slices; ++i) {
+            const auto phi = i * 2 * M_PI / slices;
+            const auto z = float(r * std::cos(phi)), x = float(r * std::sin(phi));
+
+            const auto v = Object::Vertex{{x, y, z}, {x, y, z}};
+            vertices.emplace_back(v);
+        }
+    }
+    return vertices;
+}());
+
+const auto solidSphereIndex = std::vector<GLuint>([]() {
+    auto indices = std::vector<GLuint>();
+    for(auto j = 0; j < stacks; ++j) {
+        const auto k = j * (slices + 1);
+        for(auto i = 0; i < slices; ++i) {
+            const auto k0 = k + i;
+            const auto k1 = k0 + 1;
+            const auto k2 = k1 + slices;
+            const auto k3 = k2 + 1;
+            indices.emplace_back(k0);
+            indices.emplace_back(k2);
+            indices.emplace_back(k3);
+            indices.emplace_back(k0);
+            indices.emplace_back(k3);
+            indices.emplace_back(k1);
+        }
+    }
+    return indices;
+}());
+
 } // namespace shape_example

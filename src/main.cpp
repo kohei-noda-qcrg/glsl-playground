@@ -138,7 +138,7 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
     const auto modelviewLoc    = glGetUniformLocation(program, "model");
     const auto projectionLoc   = glGetUniformLocation(program, "projection");
     const auto normalMatrixLoc = glGetUniformLocation(program, "normalMatrix");
-    const auto shape           = std::unique_ptr<const Shape>(new SolidShape(shape_example::solidCubeVertex));
+    const auto shape           = std::unique_ptr<const Shape>(new SolidShapeIndex(shape_example::solidSphereVertex, shape_example::solidSphereIndex));
     const auto shape_oct       = std::unique_ptr<const Shape>(new Shape(shape_example::octahedronVertex));
 
     glfwSetTime(0.0);
