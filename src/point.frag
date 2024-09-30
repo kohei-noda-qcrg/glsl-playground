@@ -1,6 +1,8 @@
 #version 150 core
-flat in vec4 vertex_color;
+
+in vec3 Idiffuse;
 out vec4 fragment;
-void main() {
-    fragment = vertex_color;
+void main()
+{
+    fragment=vec4(Idiffuse,1.);
 }

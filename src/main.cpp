@@ -82,7 +82,7 @@ auto createProgram(const char* vsrc, const char* fsrc) -> GLuint {
     }
 
     glBindAttribLocation(program, 0, "position");
-    glBindAttribLocation(program, 1, "color");
+    glBindAttribLocation(program, 1, "normal");
     glBindFragDataLocation(program, 0, "fragment");
     glLinkProgram(program);
 
@@ -135,10 +135,11 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
 
     const auto program = loadProgram(point_vert, point_frag);
 
-    const auto modelviewLoc  = glGetUniformLocation(program, "model");
-    const auto projectionLoc = glGetUniformLocation(program, "projection");
-    const auto shape         = std::unique_ptr<const Shape>(new SolidShape(shape_example::solidCubeVertex));
-    const auto shape_oct     = std::unique_ptr<const Shape>(new Shape(shape_example::octahedronVertex));
+    const auto modelviewLoc    = glGetUniformLocation(program, "model");
+    const auto projectionLoc   = glGetUniformLocation(program, "projection");
+    const auto normalMatrixLoc = glGetUniformLocation(program, "normalMatrix");
+    const auto shape           = std::unique_ptr<const Shape>(new SolidShape(shape_example::solidCubeVertex));
+    const auto shape_oct       = std::unique_ptr<const Shape>(new Shape(shape_example::octahedronVertex));
 
     glfwSetTime(0.0);
 
@@ -160,13 +161,19 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
         const auto target = std::array<GLfloat, 3>{0.0f, 0.0f, 0.0f};
         const auto up     = std::array<GLfloat, 3>{0.0f, 1.0f, 0.0f};
         const auto view   = Matrix::lookAt(pov, target, up);
+
+        auto normalMatrix = std::array<GLfloat, 9>{};
         // modelview transform matrix
         const auto modelview = model * view;
+        modelview.getNormalMatrix(normalMatrix);
         glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, projection.data());
         glUniformMatrix4fv(modelviewLoc, 1, GL_FALSE, modelview.data());
+        glUniformMatrix3fv(normalMatrixLoc, 1, GL_FALSE, normalMatrix.data());
         shape->draw();
         const auto modelview1 = modelview * Matrix::translate(0.0f, 0.0f, 3.0f);
+        modelview1.getNormalMatrix(normalMatrix);
         glUniformMatrix4fv(modelviewLoc, 1, GL_FALSE, modelview1.data());
+        glUniformMatrix3fv(normalMatrixLoc, 1, GL_FALSE, normalMatrix.data());
         shape->draw();
         shape_oct->draw();
         window.swapBuffers();

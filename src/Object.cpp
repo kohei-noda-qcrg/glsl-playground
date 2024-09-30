@@ -18,10 +18,10 @@ Object::Object(const std::vector<Vertex>& vertex, const std::optional<std::vecto
     glVertexAttribPointer(0, size_pos, GL_FLOAT, GL_FALSE, sizeof(Vertex), gpu_pos);
     glEnableVertexAttribArray(0);
 
-    // vertex color
-    const auto gpu_color  = reinterpret_cast<const void*>(offsetof(Vertex, color));
-    constexpr auto size_color = sizeof(Vertex::color) / sizeof(Vertex::color[0]);
-    glVertexAttribPointer(1, size_color, GL_FLOAT, GL_FALSE, sizeof(Vertex), gpu_color);
+    // vertex normal vector
+    const auto gpu_normal  = reinterpret_cast<const void*>(offsetof(Vertex, normal));
+    constexpr auto size_normal = sizeof(Vertex::normal) / sizeof(Vertex::normal[0]);
+    glVertexAttribPointer(1, size_normal, GL_FLOAT, GL_FALSE, sizeof(Vertex), gpu_normal);
     glEnableVertexAttribArray(1);
 
     glGenBuffers(1, &ibo);

@@ -14,7 +14,7 @@ class Object {
   public:
     struct Vertex {
         std::array<GLfloat, 3> position;
-        std::array<GLfloat, 3> color;
+        std::array<GLfloat, 3> normal;
     };
 
     void bind() const {

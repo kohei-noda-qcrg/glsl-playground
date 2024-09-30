@@ -43,6 +43,19 @@ class Matrix {
         return matrix.data();
     }
 
+    // calculate the normal vector transfom matrix
+    auto getNormalMatrix(std::array<GLfloat, 9>& m) const -> void {
+        m[0] = matrix[5] * matrix[10] - matrix[6] * matrix[9];
+        m[1] = matrix[6] * matrix[8] - matrix[4] * matrix[10];
+        m[2] = matrix[4] * matrix[9] - matrix[5] * matrix[8];
+        m[3] = matrix[9] * matrix[2] - matrix[10] * matrix[1];
+        m[4] = matrix[10] * matrix[0] - matrix[8] * matrix[2];
+        m[5] = matrix[8] * matrix[1] - matrix[9] * matrix[0];
+        m[6] = matrix[1] * matrix[6] - matrix[2] * matrix[5];
+        m[7] = matrix[2] * matrix[4] - matrix[0] * matrix[6];
+        m[8] = matrix[0] * matrix[5] - matrix[1] * matrix[4];
+    }
+
     /// @brief create an view transform matrxi
     /// @param pov point of view (camera position)
     /// @param target target position
@@ -198,7 +211,7 @@ class Matrix {
      * 0                      0                      0                      1
      */
     static auto rotate(GLfloat x, GLfloat y, GLfloat z, GLfloat angle) {
-        auto t = Matrix();
+        auto    t = Matrix();
         GLfloat d = std::sqrt(x * x + y * y + z * z);
         if(d < 0.0f) return t; // invalid axis, return identity matrix because it's not going to change anything
         t.loadIdentity();
