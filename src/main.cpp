@@ -146,10 +146,12 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
     const auto shape           = std::unique_ptr<const Shape>(new SolidShapeIndex(shape_example::solidSphereVertex, shape_example::solidSphereIndex));
     const auto shape_oct       = std::unique_ptr<const Shape>(new Shape(shape_example::octahedronVertex));
 
-    constexpr auto Lpos      = vector::Vector{0.0f, 0.0f, 5.0f, 1.0f};
-    constexpr auto Lambient  = std::array<GLfloat, 3>{0.2f, 0.1f, 0.1f};
-    constexpr auto Ldiffuse  = std::array<GLfloat, 3>{1.0f, 0.5f, 0.5f};
-    constexpr auto Lspecular = std::array<GLfloat, 3>{1.0f, 0.5f, 0.5f};
+    using vec3                      = std::array<GLfloat, 3>;
+    static constexpr auto Lcount    = 2;
+    constexpr auto        Lpos      = std::array{vector::Vector{0.0f, 0.0f, 5.0f, 1.0f}, vector::Vector{8.0f, 0.0f, 0.0f, 1.0f}};
+    constexpr auto        Lambient  = std::array{vec3{0.2f, 0.1f, 0.1f}, vec3{0.1f, 0.1f, 0.1f}};
+    constexpr auto        Ldiffuse  = std::array{vec3{1.0f, 0.5f, 0.5f}, vec3{0.9f, 0.9f, 0.9f}};
+    constexpr auto        Lspecular = std::array{vec3{1.0f, 0.5f, 0.5f}, vec3{0.9f, 0.9f, 0.9f}};
 
     glfwSetTime(0.0);
 
@@ -179,10 +181,12 @@ auto main(const int /*argc*/, const char* const argv[]) -> int {
         glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, projection.data());
         glUniformMatrix4fv(modelviewLoc, 1, GL_FALSE, modelview.data());
         glUniformMatrix3fv(normalMatrixLoc, 1, GL_FALSE, normalMatrix.data());
-        glUniform4fv(LposLoc, 1, (view * Lpos).data());
-        glUniform3fv(LambientLoc, 1, Lambient.data());
-        glUniform3fv(LdiffuseLoc, 1, Ldiffuse.data());
-        glUniform3fv(LspecularLoc, 1, Lspecular.data());
+        for(auto i = 0; i < Lcount; i += 1) {
+            glUniform4fv(LposLoc + i, 1, (view * Lpos[i]).data());
+            glUniform3fv(LambientLoc + i, 1, Lambient[i].data());
+            glUniform3fv(LdiffuseLoc + i, 1, Ldiffuse[i].data());
+            glUniform3fv(LspecularLoc + i, 1, Lspecular[i].data());
+        }
         shape->draw();
         const auto modelview1 = modelview * Matrix::translate(0.0f, 0.0f, 3.0f);
         modelview1.getNormalMatrix(normalMatrix);
